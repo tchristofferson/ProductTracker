@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/base-page :: head (${'Products'})"/>
+<body class="blue-grey darken-4 white-text">
+    <div th:replace="/fragments/base-page :: navigation"/>
+    <div class="container">
+        <h1>Product Tracking</h1>
+        <h5 th:text="${'Products for '} + ${location.name}"></h5>
+        <h6 class="grey-text" th:if="${products.isEmpty()}">There are no products</h6>
+        <!--Categories-->
+        <div class="collection">
+            <a href="" th:each="category : ${categories}"></a>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.collapsible');
+            var instances = M.Collapsible.init(elems);
+        });
+    </script>
+</body>
+</html>

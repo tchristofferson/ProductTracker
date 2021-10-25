@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head (title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <title th:text="${title}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body>
+    <!--Navigation fragment-->
+    <div th:fragment="navigation">
+        <!--This is the non-mobile navigation-->
+        <nav class="blue darken-1">
+            <div class="nav-wrapper">
+                <ul class="right hide-on-med-and-down">
+                    <li sec:authorize="isAnonymous()"><a href="/login">Login</a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/signup">Signup</a></li>
+                    <li sec:authorize="isAuthenticated()"><a href="#">Account</a></li>
+                    <li sec:authorize="isAuthenticated()"><a href="/logout">Logout</a></li>
+                </ul>
+                <!--Mobile side navigation button-->
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="left hide-on-med-and-down">
+                    <li><a href="/locations/page/1">Products</a></li>
+                    <li><a href="#">Premium</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!--This is the mobile navigation-->
+        <ul class="sidenav" id="mobile-demo">
+            <li><a href="/locations/page/1">Products</a></li>
+            <li><a href="#">Premium</a></li>
+        </ul>
+        <!--Script makes the mobile navigation side slider work-->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var elems = document.querySelectorAll('.sidenav');
+                var instances = M.Sidenav.init(elems);
+            });
+        </script>
+    </div>
+    <ul class="pagination" th:fragment="pagination (beginningUrl, pageRange, activePage)" th:with="isLastPage=${locations.getTotalPages()} ge ${activePage},isFirstPage=${activePage} eq 1">
+        <li th:class="${isFirstPage} ? 'disabled'"><a th:href="${isFirstPage} ? '#' : ${beginningUrl} + '/' + (${activePage} - 1)"><i class="material-icons">chevron_left</i></a></li>
+        <li th:class="${pageNumber} eq ${activePage} ? 'active'" th:each="pageNumber : ${pageRange}"><a th:href="${beginningUrl} + '/' + ${pageNumber}" th:text="${pageNumber}"/></li>
+        <li th:classappend="${isLastPage} ? 'disabled'" class="waves-effect"><a th:href="${isLastPage} ? '#' : ${beginningUrl} + '/' + (${activePage} + 1)"><i class="material-icons">chevron_right</i></a></li>
+    </ul>
+</body>
+</html>
