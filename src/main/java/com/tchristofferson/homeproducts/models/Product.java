@@ -13,13 +13,13 @@ public class Product {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @ManyToOne(targetEntity = Location.class)
-    @JoinColumn(name = "location_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_products_locationId"))
-    private Long locationId;
+    @ManyToOne
+    @JoinColumn(name = "location_id", foreignKey = @ForeignKey(name = "Fk_product_locationId"))
+    private Location location;
 
-    @ManyToOne(targetEntity = Category.class)
-    @JoinColumn(name = "category_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_products_categoryId"))
-    private Long categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "Fk_product_categoryId"))
+    private Category category;
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")
     private String name;
@@ -32,6 +32,14 @@ public class Product {
 
     @Column(name = "inventory")
     private Integer inventory;
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
 
     public Product() {}
 
@@ -47,12 +55,8 @@ public class Product {
         this.id = id;
     }
 
-    public Long getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(Long locationId) {
-        this.locationId = locationId;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public String getName() {
@@ -63,12 +67,8 @@ public class Product {
         this.name = name;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getProductNumber() {
@@ -104,13 +104,11 @@ public class Product {
             return false;
 
         Product product = (Product) o;
-        return id.equals(product.id) && Objects.equals(locationId, product.locationId) && Objects.equals(categoryId, product.categoryId)
-                && Objects.equals(inventory, product.inventory) && name.equals(product.name)
-                && Objects.equals(productNumber, product.productNumber) && Objects.equals(link, product.link);
+        return Objects.equals(id, product.id) && Objects.equals(location, product.location) && Objects.equals(category, product.category) && Objects.equals(name, product.name) && Objects.equals(productNumber, product.productNumber) && Objects.equals(link, product.link) && Objects.equals(inventory, product.inventory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, locationId, categoryId, name, productNumber, link, inventory);
+        return Objects.hash(id, location, category, name, productNumber, link, inventory);
     }
 }

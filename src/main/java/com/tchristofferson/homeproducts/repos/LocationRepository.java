@@ -1,4 +1,4 @@
-package com.tchristofferson.homeproducts.dao;
+package com.tchristofferson.homeproducts.repos;
 
 import com.tchristofferson.homeproducts.models.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
