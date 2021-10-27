@@ -24,7 +24,7 @@
                 <!--Mobile side navigation button-->
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <ul class="left hide-on-med-and-down">
-                    <li><a href="/locations/page/1">Products</a></li>
+                    <li><a href="/properties/page/1">Products</a></li>
                     <li><a href="/categories">Categories</a></li>
                     <li><a href="#">Premium</a></li>
                 </ul>
@@ -32,7 +32,7 @@
         </nav>
         <!--This is the mobile navigation-->
         <ul class="sidenav" id="mobile-demo">
-            <li><a href="/locations/page/1">Products</a></li>
+            <li><a href="/properties/page/1">Products</a></li>
             <li><a href="/categories">Categories</a></li>
             <li><a href="#">Premium</a></li>
         </ul>
@@ -44,7 +44,7 @@
             });
         </script>
     </div>
-    <ul class="pagination" th:fragment="pagination (beginningUrl, pageRange, activePage)" th:with="isLastPage=${locations.getTotalPages()} ge ${activePage},isFirstPage=${activePage} eq 1">
+    <ul class="pagination" th:fragment="pagination (beginningUrl, pageRange, activePage)" th:with="isLastPage=${properties.getTotalPages()} ge ${activePage},isFirstPage=${activePage} eq 1">
         <li th:class="${isFirstPage} ? 'disabled'"><a th:href="${isFirstPage} ? '#' : ${beginningUrl} + '/' + (${activePage} - 1)"><i class="material-icons">chevron_left</i></a></li>
         <li th:class="${pageNumber} eq ${activePage} ? 'active'" th:each="pageNumber : ${pageRange}"><a th:href="${beginningUrl} + '/' + ${pageNumber}" th:text="${pageNumber}"/></li>
         <li th:classappend="${isLastPage} ? 'disabled'" class="waves-effect"><a th:href="${isLastPage} ? '#' : ${beginningUrl} + '/' + (${activePage} + 1)"><i class="material-icons">chevron_right</i></a></li>

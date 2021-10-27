@@ -1,8 +1,9 @@
 package com.tchristofferson.homeproducts.services;
 
 import com.tchristofferson.homeproducts.models.Category;
-import com.tchristofferson.homeproducts.models.Location;
+import com.tchristofferson.homeproducts.models.Property;
 import com.tchristofferson.homeproducts.models.Product;
+import com.tchristofferson.homeproducts.models.PropertyLocation;
 import com.tchristofferson.homeproducts.repos.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,12 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Map<Category, List<Product>> getCategoryProductMap(Location location) {
-        return productRepository.findByLocationOrderByCategoryAsc(location).stream()
+    public void saveProduct(Product product) {
+        productRepository.save(product);
+    }
+
+    public Map<Category, List<Product>> getCategoryProductMap(PropertyLocation propertyLocation) {
+        return productRepository.findByPropertyLocationOrderByCategoryAsc(propertyLocation).stream()
                 .collect(Collectors.groupingBy(Product::getCategory, LinkedHashMap::new, Collectors.toList()));
     }
 }

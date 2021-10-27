@@ -14,11 +14,11 @@ public class Product {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "location_id", foreignKey = @ForeignKey(name = "Fk_product_locationId"))
-    private Location location;
+    @JoinColumn(name = "property_location_id", nullable = false)
+    private PropertyLocation propertyLocation;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "Fk_product_categoryId"))
+    @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "Fk_product_categoryId"))
     private Category category;
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")
@@ -32,10 +32,6 @@ public class Product {
 
     @Column(name = "inventory")
     private Integer inventory;
-
-    public Location getLocation() {
-        return location;
-    }
 
     public Category getCategory() {
         return category;
@@ -55,8 +51,12 @@ public class Product {
         this.id = id;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public PropertyLocation getPropertyLocation() {
+        return propertyLocation;
+    }
+
+    public void setPropertyLocation(PropertyLocation propertyLocation) {
+        this.propertyLocation = propertyLocation;
     }
 
     public String getName() {
@@ -104,11 +104,11 @@ public class Product {
             return false;
 
         Product product = (Product) o;
-        return Objects.equals(id, product.id) && Objects.equals(location, product.location) && Objects.equals(category, product.category) && Objects.equals(name, product.name) && Objects.equals(productNumber, product.productNumber) && Objects.equals(link, product.link) && Objects.equals(inventory, product.inventory);
+        return Objects.equals(id, product.id) && Objects.equals(propertyLocation, product.propertyLocation) && Objects.equals(category, product.category) && Objects.equals(name, product.name) && Objects.equals(productNumber, product.productNumber) && Objects.equals(link, product.link) && Objects.equals(inventory, product.inventory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, location, category, name, productNumber, link, inventory);
+        return Objects.hash(id, propertyLocation, category, name, productNumber, link, inventory);
     }
 }

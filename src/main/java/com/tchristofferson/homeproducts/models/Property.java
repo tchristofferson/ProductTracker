@@ -3,14 +3,13 @@ package com.tchristofferson.homeproducts.models;
 import javax.persistence.*;
 import java.util.Objects;
 
-//This class doesn't actually contain the products for the location (stored in database)
-@Entity(name = "Location")
-@Table(name = "Locations")
-public class Location {
+@Entity(name = "Property")
+@Table(name = "Properties")
+public class Property {
 
     @Id
-    @SequenceGenerator(name = "location_sequence", sequenceName = "location_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "location_sequence")
+    @SequenceGenerator(name = "property_sequence", sequenceName = "property_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "property_sequence")
     @Column(name = "id", updatable = false)
     private Long id;
 
@@ -18,9 +17,9 @@ public class Location {
     private String name;
 
     //Used by JPA
-    public Location() {}
+    public Property() {}
 
-    public Location(String name) {
+    public Property(String name) {
         this.name = name;
     }
 
@@ -48,8 +47,8 @@ public class Location {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Location location = (Location) o;
-        return id.equals(location.id) && name.equals(location.name);
+        Property property = (Property) o;
+        return Objects.equals(id, property.id) && Objects.equals(name, property.name);
     }
 
     @Override
