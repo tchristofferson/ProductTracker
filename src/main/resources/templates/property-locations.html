@@ -14,13 +14,14 @@
                         <span class="card-title truncate" th:text="${propertyLocation.name}"/>
                     </div>
                     <div class="card-action">
-                        <a class="btn blue darken-1" th:href="${'/products/'}">Products</a>
+                        <a class="btn blue darken-1" th:href="${'/products/'} + ${propertyLocation.id}">Products</a>
                         <a class="btn" href="#">Edit</a>
                         <a class="btn red" href="#">Delete</a>
                     </div>
                 </div>
             </div>
         </div>
+        <div th:replace="/fragments/base-page :: pagination (beginningUrl=${beginningUrl}, pageRange=${pageRange}, activePage=${activePage}, pageable=${propertyLocations})"/>
     </div>
 </body>
 </html>

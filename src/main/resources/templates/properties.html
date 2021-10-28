@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div th:if="${properties.getTotalPages()} &gt; 1" th:replace="/fragments/base-page :: pagination (beginningUrl=${beginningUrl}, pageRange=${pageRange}, activePage=${activePage})"/>
+    <div th:replace="/fragments/base-page :: pagination (beginningUrl=${beginningUrl}, pageRange=${pageRange}, activePage=${activePage}, pageable=${properties})"/>
   </div>
 </body>
 </html>

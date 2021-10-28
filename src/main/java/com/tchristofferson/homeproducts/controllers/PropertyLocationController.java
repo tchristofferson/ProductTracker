@@ -5,6 +5,7 @@ import com.tchristofferson.homeproducts.exc.InvalidIdException;
 import com.tchristofferson.homeproducts.models.Property;
 import com.tchristofferson.homeproducts.models.PropertyLocation;
 import com.tchristofferson.homeproducts.services.PropertyLocationService;
+import com.tchristofferson.homeproducts.utils.BasicUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -45,9 +46,13 @@ public class PropertyLocationController {
     @GetMapping(path = BASE_URL + "/page/{page}")
     public String getPropertyLocations(Model model, @PathVariable("propertyId") Long propertyId, @PathVariable("page") int page) {
         Page<PropertyLocation> propertyLocationPage = propertyLocationService.getPropertyLocations(PageRequest.of(page - 1, ApplicationSettings.ITEMS_PER_PAGE), propertyId);
-        model.addAttribute("propertyLocations", propertyLocationPage);
 
-        return "property-location";
+        model.addAttribute("propertyLocations", propertyLocationPage);
+        model.addAttribute("beginningUrl", BASE_URL + "/page");
+        model.addAttribute("pageRange", BasicUtil.getNumberArray(propertyLocationPage));
+        model.addAttribute("activePage", page);
+
+        return "property-locations";
     }
 
     @PostMapping(path = BASE_URL + "/new")

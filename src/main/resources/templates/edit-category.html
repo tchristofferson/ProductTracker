@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/base-page :: head (${'Home Products'})"/>
+<body class="blue-grey darken-4 white-text">
+    <div th:replace="/fragments/base-page :: navigation"/>
+    <div class="container">
+        <h1>Category</h1>
+        <form th:with="isNew=${categoryId} == null" th:action="${isNew} ? '/categories/new' : '/categories/edit?id=' + ${category.id}" method="post">
+            <input th:unless="${isNew}" type="hidden" name="_method" value="put">
+            <div class="input-field">
+                <label for="categoryName">Category Name</label>
+                <input placeholder="Placeholder" id="categoryName" type="text" class="validate" th:value="not ${isNew} ? ${category.name}" required>
+            </div>
+            <button class="btn" type="submit">Save</button>
+        </form>
+    </div>
+</body>
+</html>

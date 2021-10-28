@@ -21,6 +21,9 @@ public class CategoryController {
     @Autowired
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
+
+        //TODO: Remove
+        categoryService.save(new Category("Lights"));
     }
 
     //TODO: Use pagination

@@ -1,7 +1,6 @@
 package com.tchristofferson.homeproducts.services;
 
 import com.tchristofferson.homeproducts.models.Category;
-import com.tchristofferson.homeproducts.models.Property;
 import com.tchristofferson.homeproducts.models.Product;
 import com.tchristofferson.homeproducts.models.PropertyLocation;
 import com.tchristofferson.homeproducts.repos.ProductRepository;

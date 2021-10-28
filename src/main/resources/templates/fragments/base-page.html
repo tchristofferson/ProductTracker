@@ -44,7 +44,7 @@
             });
         </script>
     </div>
-    <ul class="pagination" th:fragment="pagination (beginningUrl, pageRange, activePage)" th:with="isLastPage=${properties.getTotalPages()} ge ${activePage},isFirstPage=${activePage} eq 1">
+    <ul th:if="${pageable.getTotalPages()} &gt; 1" class="pagination" th:fragment="pagination (beginningUrl, pageRange, activePage, pageable)" th:with="isLastPage=${pageable.getTotalPages()} ge ${activePage},isFirstPage=${activePage} eq 1">
         <li th:class="${isFirstPage} ? 'disabled'"><a th:href="${isFirstPage} ? '#' : ${beginningUrl} + '/' + (${activePage} - 1)"><i class="material-icons">chevron_left</i></a></li>
         <li th:class="${pageNumber} eq ${activePage} ? 'active'" th:each="pageNumber : ${pageRange}"><a th:href="${beginningUrl} + '/' + ${pageNumber}" th:text="${pageNumber}"/></li>
         <li th:classappend="${isLastPage} ? 'disabled'" class="waves-effect"><a th:href="${isLastPage} ? '#' : ${beginningUrl} + '/' + (${activePage} + 1)"><i class="material-icons">chevron_right</i></a></li>
