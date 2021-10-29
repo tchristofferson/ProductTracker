@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/base-page :: head (${'Property'})"/>
+<body class="blue-grey darken-4 white-text">
+    <div class="container">
+        <h1>Property</h1>
+        <form th:with="isNew=${property} == null" th:action="${isNew} ? '/properties/new' : '/properties/edit'" method="post">
+          <input th:unless="${isNew}" type="hidden" name="id" th:value="${property.id}">
+          <div class="input-field">
+            <label for="propertyName">Property Name</label>
+            <input name="propertyName" id="propertyName" type="text" class="validate white-text" th:value="not ${isNew} ? ${property.name}" required>
+          </div>
+          <button class="btn blue darken-1" type="submit">Save</button>
+        </form>
+    </div>
+</body>
+</html>

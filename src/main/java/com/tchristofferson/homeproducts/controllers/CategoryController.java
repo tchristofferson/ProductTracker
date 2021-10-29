@@ -50,14 +50,13 @@ public class CategoryController {
     }
 
     @GetMapping(path = "/edit/{categoryId}")
-    public String editCategory(Model model, @PathVariable("categoryId") Long categoryId) {
+    public String editCategory(Model model, @PathVariable("categoryId") long categoryId) {
         Optional<Category> optionalCategory = categoryService.getCategory(categoryId);
 
         if (optionalCategory.isEmpty())
             throw new InvalidIdException("Invalid category id!");
 
         model.addAttribute("category", optionalCategory.get());
-
         return "edit-category";
     }
 
@@ -70,7 +69,7 @@ public class CategoryController {
 
     /* This is more of a PUT request, but HTML form only allows POST. Could be done using JavaScript */
     @PostMapping(path = "/edit")
-    public String editCategory(Model model, @RequestParam("id") long categoryId, @RequestParam("categoryName") @NotBlank String name) {
+    public String editCategory(@RequestParam("id") long categoryId, @RequestParam("categoryName") @NotBlank String name) {
         Category category = new Category(name);
         category.setId(categoryId);
 
@@ -80,7 +79,7 @@ public class CategoryController {
             throw new InvalidIdException("Invalid category id!");
         }
 
-        return getCategories(model, null);
+        return "redirect:/categories";
     }
 
     /* This is more of a DELETE request, but HTML only allows POST */

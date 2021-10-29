@@ -38,13 +38,7 @@
                 </div>
             </div>
         </div>
+        <div th:replace="/fragments/base-page :: addButton (href=${'/categories/new'})" />
     </div>
-    <div th:replace="/fragments/base-page :: addButton (href=${'/categories/new'})" />
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.sidenav');
-            var instances = M.Sidenav.init(elems, options);
-        });
-    </script>
 </body>
 </html>
