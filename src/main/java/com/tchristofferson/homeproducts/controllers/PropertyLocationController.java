@@ -5,6 +5,7 @@ import com.tchristofferson.homeproducts.exc.InvalidIdException;
 import com.tchristofferson.homeproducts.models.Property;
 import com.tchristofferson.homeproducts.models.PropertyLocation;
 import com.tchristofferson.homeproducts.services.PropertyLocationService;
+import com.tchristofferson.homeproducts.services.PropertyService;
 import com.tchristofferson.homeproducts.utils.BasicUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,16 +19,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Optional;
 
 @Controller
 public class PropertyLocationController {
 
     private static final String BASE_URL = "/properties/{propertyId}";
     private final PropertyLocationService propertyLocationService;
+    private final PropertyService propertyService;
 
     @Autowired
-    public PropertyLocationController(PropertyLocationService propertyLocationService) {
+    public PropertyLocationController(PropertyLocationService propertyLocationService, PropertyService propertyService) {
         this.propertyLocationService = propertyLocationService;
+        this.propertyService = propertyService;
 
         //TODO: Remove
         Property property = new Property();
@@ -45,8 +49,15 @@ public class PropertyLocationController {
 
     @GetMapping(path = BASE_URL + "/page/{page}")
     public String getPropertyLocations(Model model, @PathVariable("propertyId") Long propertyId, @PathVariable("page") int page) {
+        Optional<Property> optionalProperty = propertyService.getProperty(propertyId);
+
+        if (optionalProperty.isEmpty())
+            throw new InvalidIdException("Invalid property id!");
+
+        Property property = optionalProperty.get();
         Page<PropertyLocation> propertyLocationPage = propertyLocationService.getPropertyLocations(PageRequest.of(page - 1, ApplicationSettings.ITEMS_PER_PAGE), propertyId);
 
+        model.addAttribute("property", property);
         model.addAttribute("propertyLocations", propertyLocationPage);
         model.addAttribute("beginningUrl", BASE_URL + "/page");
         model.addAttribute("pageRange", BasicUtil.getNumberArray(propertyLocationPage));

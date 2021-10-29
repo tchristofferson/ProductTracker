@@ -5,11 +5,11 @@
     <div th:replace="/fragments/base-page :: navigation"/>
     <div class="container">
         <h1>Category</h1>
-        <form th:with="isNew=${categoryId} == null" th:action="${isNew} ? '/categories/new' : '/categories/edit?id=' + ${category.id}" method="post">
-            <input th:unless="${isNew}" type="hidden" name="_method" value="put">
+        <form th:with="isNew=${category} == null" th:action="${isNew} ? '/categories/new' : '/categories/edit'" method="post">
+            <input th:unless="${isNew}" type="hidden" name="id" th:value="${category.id}">
             <div class="input-field">
                 <label for="categoryName">Category Name</label>
-                <input placeholder="Placeholder" id="categoryName" type="text" class="validate" th:value="not ${isNew} ? ${category.name}" required>
+                <input name="categoryName" id="categoryName" type="text" class="validate white-text" th:value="not ${isNew} ? ${category.name}" required>
             </div>
             <button class="btn" type="submit">Save</button>
         </form>

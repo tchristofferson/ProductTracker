@@ -5,6 +5,8 @@ import com.tchristofferson.homeproducts.models.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CategoryService {
 
@@ -23,7 +25,19 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    public Iterable<Category> getCategories(String nameSearch) {
+        return categoryRepository.findByNameContainingIgnoreCase(nameSearch);
+    }
+
     public void save(Category category) {
         categoryRepository.save(category);
+    }
+
+    public Optional<Category> getCategory(Long categoryId) {
+        return categoryRepository.findById(categoryId);
+    }
+
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
     }
 }

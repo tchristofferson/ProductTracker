@@ -5,6 +5,11 @@
     <div th:replace="/fragments/base-page :: navigation"/>
     <div class="container">
         <h1>Product Tracking</h1>
+        <p>
+            <a href="/properties" th:text="${property.name}" />
+            <i class="material-icons tiny">chevron_right</i>
+            <a href="#">Locations</a>
+        </p>
         <h5>Locations</h5>
         <h6 class="grey-text" th:if="${propertyLocations.isEmpty()}">There are no locations</h6>
         <div class="row">

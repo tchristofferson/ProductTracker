@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PropertyLocationService {
 
@@ -16,6 +18,10 @@ public class PropertyLocationService {
     @Autowired
     public PropertyLocationService(PropertyLocationRepository propertyLocationRepository) {
         this.propertyLocationRepository = propertyLocationRepository;
+    }
+
+    public Optional<PropertyLocation> getPropertyLocation(Long id) {
+        return propertyLocationRepository.findById(id);
     }
 
     public Page<PropertyLocation> getPropertyLocations(Pageable pageable, Long propertyId) {
