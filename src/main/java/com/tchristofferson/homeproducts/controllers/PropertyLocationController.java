@@ -44,7 +44,7 @@ public class PropertyLocationController {
 
     @GetMapping(BASE_URL)
     public String getPropertyLocations(Model model, @PathVariable("propertyId") Long propertyId) {
-        return getPropertyLocations(model, propertyId, 1);
+        return "redirect:/properties/" + propertyId + "/page/1";
     }
 
     @GetMapping(path = BASE_URL + "/page/{page}")
@@ -66,8 +66,26 @@ public class PropertyLocationController {
         return "property-locations";
     }
 
+    @GetMapping(path = BASE_URL + "/new")
+    public String addPropertyLocation(Model model, @PathVariable("propertyId") long propertyId) {
+        model.addAttribute("propertyId", propertyId);
+        return "edit-property-location";
+    }
+
+    @GetMapping(path = BASE_URL + "/edit/{propertyLocationId}")
+    public String editPropertyLocation(Model model, @PathVariable("propertyLocationId") long propertyLocationId) {
+        Optional<PropertyLocation> optionalPropertyLocation = propertyLocationService.getPropertyLocation(propertyLocationId);
+
+        if (optionalPropertyLocation.isEmpty())
+            throw new InvalidIdException("Invalid property location id!");
+
+        model.addAttribute("propertyId", optionalPropertyLocation.get().getProperty().getId());
+        model.addAttribute("propertyLocation", optionalPropertyLocation.get());
+        return "edit-property-location";
+    }
+
     @PostMapping(path = BASE_URL + "/new")
-    public String addPropertyLocation(Model model, @PathVariable("propertyId") Long propertyId, @RequestParam("name") @NotBlank String name) {
+    public String addPropertyLocation(@PathVariable("propertyId") long propertyId, @RequestParam("name") @NotBlank String name) {
         Property property = new Property();
         property.setId(propertyId);
 
@@ -80,6 +98,24 @@ public class PropertyLocationController {
             throw new InvalidIdException("Invalid property id!");
         }
 
-        return getPropertyLocations(model, propertyId, 1);
+        return "redirect:/properties/" + propertyId;
+    }
+
+    @PostMapping(path = BASE_URL + "/edit/{propertyLocationId}")
+    public String editPropertyLocation(@PathVariable("propertyId") long propertyId, @PathVariable("propertyLocationId") long propertyLocationId, @RequestParam("name") @NotBlank String name) {
+        Property property = new Property();
+        property.setId(propertyId);
+
+        PropertyLocation propertyLocation = new PropertyLocation(name);
+        propertyLocation.setId(propertyLocationId);
+        propertyLocation.setProperty(property);
+
+        try {
+            propertyLocationService.savePropertyLocation(propertyLocation);
+        } catch (DataIntegrityViolationException e) {
+            throw new InvalidIdException("Invalid property or property location id!");
+        }
+
+        return "redirect:/properties/" + propertyId;
     }
 }

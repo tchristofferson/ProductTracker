@@ -20,13 +20,14 @@
                     </div>
                     <div class="card-action">
                         <a class="btn blue darken-1" th:href="${'/products/'} + ${propertyLocation.id}">Products</a>
-                        <a class="btn" href="#">Edit</a>
+                        <a class="btn" th:href="${'/properties/'} + ${property.id} + ${'/edit/'} + ${propertyLocation.id}">Edit</a>
                         <a class="btn red" href="#">Delete</a>
                     </div>
                 </div>
             </div>
         </div>
         <div th:replace="/fragments/base-page :: pagination (beginningUrl=${beginningUrl}, pageRange=${pageRange}, activePage=${activePage}, pageable=${propertyLocations})"/>
+        <div th:replace="/fragments/base-page :: addButton (href=${'/properties/'} + ${property.id} + ${'/new'})"/>
     </div>
 </body>
 </html>

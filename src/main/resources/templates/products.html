@@ -35,6 +35,7 @@
                 </div>
             </li>
         </ul>
+        <div th:replace="/fragments/base-page :: addButton (href=${'/properties/new'})"/>
     </div>
     <script>
         var elem = document.querySelector('.collapsible');

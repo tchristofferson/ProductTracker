@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/base-page :: head (${'Edit Product'})"/>
+<body  class="blue-grey darken-4 white-text">
+    <div class="container">
+        <h1>Product</h1>
+        <form th:with="isNew=${product} == null" th:action="${isNew} ? '/products/new' : '/products/edit'" method="post">
+            <input th:unless="${isNew}" type="hidden" name="id" th:value="${product.id}">
+            <div class="input-field">
+                <label for="productName">Product Name</label>
+                <input type="text" name="productName" id="productName" class="validate white-text" th:value="not ${isNew} ? ${product.name}" required>
+            </div>
+            <div class="input-field">
+                <select name="property" id="property" required>
+                    <option th:each="entry : ${propertyLocationMap}" th:value="${entry.key.id}" th:text="${entry.key.name}"/>
+                </select>
+            </div>
+            <div class="input-field">
+                <select name="propertyLocation" id="propertyLocation">
+                    <option th:each="" th:value="" th:text=""/>
+                </select>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

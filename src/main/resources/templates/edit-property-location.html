@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/base-page :: head (${'Home Products'})"/>
+<body class="blue-grey darken-4 white-text">
+    <div th:replace="/fragments/base-page :: navigation"/>
+    <div class="container">
+        <h1>Property Location</h1>
+        <form th:with="isNew=${propertyLocation} == null" th:action="${isNew} ? '/properties/' + ${propertyId} + '/new' : '/properties/' + ${propertyId} + '/edit/' + ${propertyLocation.id}" method="post">
+            <input type="hidden" name="propertyId" th:value="${propertyId}">
+            <input th:unless="${isNew}" type="hidden" name="propertyLocationId" th:value="${propertyLocation.id}">
+            <div class="input-field">
+                <label for="name">Property Location Name</label>
+                <input name="name" id="name" type="text" class="validate white-text" th:value="not ${isNew} ? ${propertyLocation.name}" required>
+            </div>
+            <button class="btn blue darken-1" type="submit">Save</button>
+        </form>
+    </div>
+</body>
+</html>
