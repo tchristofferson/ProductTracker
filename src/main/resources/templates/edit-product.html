@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/fragments/base-page :: head (${'Edit Product'})"/>
+<head th:replace="/fragments/base-page :: head (${'Product'})"/>
 <body  class="blue-grey darken-4 white-text">
     <div class="container">
         <h1>Product</h1>
-        <form th:with="isNew=${product} == null" th:action="${isNew} ? '/products/new' : '/products/edit'" method="post">
+        <form th:with="isNew=${product} == null" th:action="${isNew} ? '/products/' + ${propertyLocation.id} + '/new' : '/products/' + ${product.id} + '/edit'" method="post">
             <input th:unless="${isNew}" type="hidden" name="id" th:value="${product.id}">
+            <input type="hidden" >
             <div class="input-field">
-                <label for="productName">Product Name</label>
-                <input type="text" name="productName" id="productName" class="validate white-text" th:value="not ${isNew} ? ${product.name}" required>
+                <label for="name">Product Name*</label>
+                <input type="text" name="name" id="name" class="validate white-text" th:value="not ${isNew} ? ${product.name}" required>
             </div>
             <div class="input-field">
-                <select name="property" id="property" required>
-                    <option th:each="entry : ${propertyLocationMap}" th:value="${entry.key.id}" th:text="${entry.key.name}"/>
+                <select class="browser-default" name="category" id="category" th:with="hasCategory=not ${isNew} and ${product.category} != null">
+                    <option value="" th:selected="not ${hasCategory}">Choose Category (optional)</option>
+                    <option th:selected="${hasCategory} and ${product.category.id} == ${category.id}" th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"/>
                 </select>
             </div>
             <div class="input-field">
-                <select name="propertyLocation" id="propertyLocation">
-                    <option th:each="" th:value="" th:text=""/>
-                </select>
+                <label for="productNumber">Product Number</label>
+                <input class="white-text" type="text" name="productNumber" id="productNumber" th:value="not ${isNew} and ${product.productNumber} != null ? ${product.productNumber}">
             </div>
+            <div class="input-field">
+                <label for="link">Link</label>
+                <input class="white-text" type="text" name="link" id="link" th:value="not ${isNew} and ${product.link} != null ? ${product.link}">
+            </div>
+            <div class="input-field">
+                <label for="inventory">Inventory</label>
+                <input class="white-text" type="number" name="inventory" id="inventory" th:value="not ${isNew} and ${product.inventory} != null ? ${product.inventory}">
+            </div>
+            <button class="btn blue darken-1" type="submit">Save</button>
         </form>
     </div>
 </body>
