@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping
+@CrossOrigin("http://localhost:3000")
 public class ApplicationRestController {
 
     private final CategoryService categoryService;
