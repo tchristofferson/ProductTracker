@@ -31,7 +31,13 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public Map<Category, List<Product>> getCategoryProductMap(PropertyLocation propertyLocation) {
+    public List<Product> getProducts(long propertyLocationId) {
+        return productRepository.findByPropertyLocationOrderByCategoryAsc(new PropertyLocation(propertyLocationId));
+    }
+
+    public Map<Category, List<Product>> getCategoryProductMap(long propertyLocationId) {
+        PropertyLocation propertyLocation = new PropertyLocation(propertyLocationId);
+
         return productRepository.findByPropertyLocationOrderByCategoryAsc(propertyLocation).stream()
                 .collect(Collectors.groupingBy(Product::getCategory, LinkedHashMap::new, Collectors.toList()));
     }

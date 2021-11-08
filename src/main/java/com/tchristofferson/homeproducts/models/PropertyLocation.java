@@ -1,5 +1,7 @@
 package com.tchristofferson.homeproducts.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,16 +13,28 @@ public class PropertyLocation {
     @SequenceGenerator(name = "property_location_sequence", sequenceName = "property_location_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "property_location_sequence")
     @Column(name = "id", updatable = false)
+    @JsonProperty("id")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "property_id", nullable = false, foreignKey = @ForeignKey(name = "Fk_property_location_propertyId"))
+    @JsonProperty("property")
     private Property property;
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")
+    @JsonProperty("name")
     private String name;
 
     public PropertyLocation() {}
+
+    public PropertyLocation(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public PropertyLocation(Long id) {
+        this.id = id;
+    }
 
     public PropertyLocation(String name) {
         this.name = name;

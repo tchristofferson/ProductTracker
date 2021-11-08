@@ -12,6 +12,8 @@ public interface PropertyLocationRepository extends JpaRepository<PropertyLocati
 
     Page<PropertyLocation> findAllByPropertyOrderByPropertyAsc(Pageable pageable, Property property);
 
+    List<PropertyLocation> findAllByPropertyOrderByPropertyAsc(Property property);
+
     List<PropertyLocation> findByNameContaining(String name);
 
 }

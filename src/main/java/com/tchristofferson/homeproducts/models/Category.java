@@ -1,5 +1,7 @@
 package com.tchristofferson.homeproducts.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,15 +13,26 @@ public class Category {
     @SequenceGenerator(name = "category_sequence", sequenceName = "category_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_sequence")
     @Column(name = "id", updatable = false)
+    @JsonProperty(value = "id")
     private Long id;
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")
+    @JsonProperty("name")
     private String name;
 
     public Category() {}
 
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Category(String name) {
         this.name = name;
+    }
+
+    public Category(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

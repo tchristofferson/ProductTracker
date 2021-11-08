@@ -1,5 +1,7 @@
 package com.tchristofferson.homeproducts.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,13 +13,24 @@ public class Property {
     @SequenceGenerator(name = "property_sequence", sequenceName = "property_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "property_sequence")
     @Column(name = "id", updatable = false)
+    @JsonProperty("id")
     private Long id;
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")
+    @JsonProperty("name")
     private String name;
 
     //Used by JPA
     public Property() {}
+
+    public Property(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Property(Long id) {
+        this.id = id;
+    }
 
     public Property(String name) {
         this.name = name;

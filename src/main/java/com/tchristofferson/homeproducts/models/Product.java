@@ -1,5 +1,7 @@
 package com.tchristofferson.homeproducts.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,26 +13,33 @@ public class Product {
     @SequenceGenerator(name = "product_sequence", sequenceName = "product_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_sequence")
     @Column(name = "id", updatable = false)
+    @JsonProperty("id")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "property_location_id", nullable = false)
+    @JsonProperty("propertyLocation")
     private PropertyLocation propertyLocation;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "Fk_product_categoryId"))
+    @JsonProperty("category")
     private Category category;
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")
+    @JsonProperty("name")
     private String name;
 
     @Column(name = "product_number", columnDefinition = "TEXT")
+    @JsonProperty("productNumber")
     private String productNumber;
 
     @Column(name = "link", columnDefinition = "TEXT")
+    @JsonProperty("link")
     private String link;
 
     @Column(name = "inventory")
+    @JsonProperty("inventory")
     private Integer inventory;
 
     public Category getCategory() {
@@ -39,7 +48,16 @@ public class Product {
 
     public Product() {}
 
+    public Product(Long id) {
+        this.id = id;
+    }
+
     public Product(String name) {
+        this.name = name;
+    }
+
+    public Product(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 

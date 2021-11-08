@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +18,10 @@ public class PropertyService {
     @Autowired
     public PropertyService(PropertyRepository propertyRepository) {
         this.propertyRepository = propertyRepository;
+    }
+
+    public List<Property> getProperties() {
+        return propertyRepository.findAll();
     }
 
     public Page<Property> getPropertyPage(Pageable pageable) {
