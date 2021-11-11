@@ -40,4 +40,8 @@ public class PropertyLocationService {
     public PropertyLocation savePropertyLocation(PropertyLocation propertyLocation) {
         return propertyLocationRepository.save(propertyLocation);
     }
+
+    public void deletePropertyLocation(long propertyLocationId) {
+        propertyLocationRepository.deleteById(propertyLocationId);
+    }
 }

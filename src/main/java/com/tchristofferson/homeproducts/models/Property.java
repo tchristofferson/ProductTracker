@@ -19,6 +19,7 @@ public class Property {
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")
     @JsonProperty("name")
+    @NotBlank(message = "Invalid property name!")
     private String name;
 
     //Used by JPA

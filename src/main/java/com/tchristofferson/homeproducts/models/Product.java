@@ -3,6 +3,9 @@ package com.tchristofferson.homeproducts.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Objects;
 
 @Entity(name = "Product")
@@ -19,6 +22,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "property_location_id", nullable = false)
     @JsonProperty("propertyLocation")
+    @NotNull
     private PropertyLocation propertyLocation;
 
     @ManyToOne
@@ -28,6 +32,7 @@ public class Product {
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")
     @JsonProperty("name")
+    @NotBlank(message = "Invalid product name!")
     private String name;
 
     @Column(name = "product_number", columnDefinition = "TEXT")
@@ -40,6 +45,7 @@ public class Product {
 
     @Column(name = "inventory")
     @JsonProperty("inventory")
+    @PositiveOrZero(message = "Inventory must be positive")
     private Integer inventory;
 
     public Category getCategory() {

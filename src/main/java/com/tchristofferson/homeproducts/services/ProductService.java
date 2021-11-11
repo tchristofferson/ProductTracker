@@ -41,4 +41,8 @@ public class ProductService {
         return productRepository.findByPropertyLocationOrderByCategoryAsc(propertyLocation).stream()
                 .collect(Collectors.groupingBy(Product::getCategory, LinkedHashMap::new, Collectors.toList()));
     }
+
+    public void deleteProduct(long productId) {
+        productRepository.deleteById(productId);
+    }
 }

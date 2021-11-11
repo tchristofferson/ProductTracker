@@ -16,6 +16,11 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(invalidIdException.getMessage(), invalidIdException.getStatus());
     }
 
+    @ExceptionHandler({UnspecifiedCategoryIdException.class, UnspecifiedPropertyIdException.class, UnspecifiedPropertyLocationIdException.class})
+    public ResponseEntity<String> handleUnspecifiedIdException(UnspecifiedIdException unspecifiedIdException) {
+        return new ResponseEntity<>(unspecifiedIdException.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException) {
         return new ResponseEntity<>(methodArgumentNotValidException.getMessage(), HttpStatus.BAD_REQUEST);

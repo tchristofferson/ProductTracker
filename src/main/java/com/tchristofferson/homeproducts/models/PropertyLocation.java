@@ -3,6 +3,8 @@ package com.tchristofferson.homeproducts.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity(name = "PropertyLocation")
@@ -19,10 +21,12 @@ public class PropertyLocation {
     @ManyToOne
     @JoinColumn(name = "property_id", nullable = false, foreignKey = @ForeignKey(name = "Fk_property_location_propertyId"))
     @JsonProperty("property")
+    @NotNull(message = "Must specify an associated property!")
     private Property property;
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")
     @JsonProperty("name")
+    @NotBlank(message = "Invalid property location name!")
     private String name;
 
     public PropertyLocation() {}
