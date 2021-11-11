@@ -1,5 +1,8 @@
 package com.tchristofferson.homeproducts.controllers;
 
+import com.tchristofferson.homeproducts.exc.InvalidCategoryIdException;
+import com.tchristofferson.homeproducts.exc.InvalidPropertyIdException;
+import com.tchristofferson.homeproducts.exc.InvalidPropertyLocationIdException;
 import com.tchristofferson.homeproducts.models.Category;
 import com.tchristofferson.homeproducts.models.Product;
 import com.tchristofferson.homeproducts.models.Property;
@@ -9,8 +12,10 @@ import com.tchristofferson.homeproducts.services.ProductService;
 import com.tchristofferson.homeproducts.services.PropertyLocationService;
 import com.tchristofferson.homeproducts.services.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,22 +35,6 @@ public class ApplicationRestController {
         this.propertyService = propertyService;
         this.propertyLocationService = propertyLocationService;
         this.productService = productService;
-
-        //TODO: Remove
-        Category category = new Category("Lights");
-        categoryService.save(category);
-
-        Property property = new Property("Home");
-        propertyService.saveProperty(property);
-
-        PropertyLocation propertyLocation = new PropertyLocation("Kitchen");
-        propertyLocation.setProperty(property);
-        propertyLocationService.savePropertyLocation(propertyLocation);
-
-        Product product = new Product("Light Bulb");
-        product.setPropertyLocation(propertyLocation);
-        product.setCategory(category);
-        productService.saveProduct(product);
     }
 
     /*
@@ -108,15 +97,85 @@ public class ApplicationRestController {
         return productService.getProduct(productId);
     }
 
-    /* POST */
+    /*
+     * POST
+     */
 
-    
+    /* Categories */
+    @PostMapping(path = "/categories")
+    public Category addCategory(@RequestBody Category category) {
+        category.setId(null);
+        return categoryService.save(category);
+    }
 
-    /* PUT */
+    /* Properties */
+    @PostMapping(path = "/properties")
+    public Property addProperty(@RequestBody Property property) {
+        property.setId(null);
+        return propertyService.saveProperty(property);
+    }
 
+    /* PropertyLocation */
+    @PostMapping(path = "/propertyLocations/{propertyId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PropertyLocation addPropertyLocation(@PathVariable("propertyId") long propertyId, @RequestBody PropertyLocation propertyLocation) {
+        Optional<Property> optionalProperty = propertyService.getProperty(propertyId);
 
+        if (optionalProperty.isEmpty())
+            throw new InvalidPropertyIdException(HttpStatus.NOT_FOUND);
 
-    /* DELETE */
+        propertyLocation.setId(null);
+        propertyLocation.setProperty(optionalProperty.get());
+        propertyLocationService.savePropertyLocation(propertyLocation);
+        return propertyLocation;
+    }
+
+    /* Product */
+    @PostMapping(path = "/products/{propertyLocationId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product addProduct(@PathVariable("propertyLocationId") long propertyLocationId, @RequestBody @Valid Product product) {
+        Optional<PropertyLocation> optionalPropertyLocation = propertyLocationService.getPropertyLocation(propertyLocationId);
+
+        if (optionalPropertyLocation.isEmpty())
+            throw new InvalidPropertyLocationIdException(HttpStatus.NOT_FOUND);
+
+        if (product.getCategory() != null) {
+            Optional<Category> optionalCategory = categoryService.getCategory(product.getCategory().getId());
+
+            if (optionalCategory.isEmpty())
+                throw new InvalidCategoryIdException(HttpStatus.CONFLICT);
+
+            product.setCategory(optionalCategory.get());
+        }
+
+        product.setId(null);
+        product.setPropertyLocation(optionalPropertyLocation.get());
+        productService.saveProduct(product);
+
+        return product;
+    }
+
+    /*
+     * PUT
+     */
+
+    /* Category */
+    @PutMapping(path = "/categories")
+    public Category updateCategory(@RequestBody @Valid Category category) {
+        if (category.getId() != null) {
+            Optional<Category> optionalCategory = categoryService.getCategory(category.getId());
+
+            if (optionalCategory.isEmpty())
+                throw new InvalidCategoryIdException(HttpStatus.NOT_FOUND);
+        }
+
+        categoryService.save(category);
+        return category;
+    }
+
+    /*
+     * DELETE
+     */
 
 
 }

@@ -37,7 +37,7 @@ public class PropertyLocationService {
         return propertyLocationRepository.findAllByPropertyOrderByPropertyAsc(pageable, property);
     }
 
-    public void savePropertyLocation(PropertyLocation propertyLocation) {
-        propertyLocationRepository.save(propertyLocation);
+    public PropertyLocation savePropertyLocation(PropertyLocation propertyLocation) {
+        return propertyLocationRepository.save(propertyLocation);
     }
 }

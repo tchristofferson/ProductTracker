@@ -29,8 +29,8 @@ public class CategoryService {
         return categoryRepository.findByNameContainingIgnoreCase(nameSearch);
     }
 
-    public void save(Category category) {
-        categoryRepository.save(category);
+    public Category save(Category category) {
+        return categoryRepository.save(category);
     }
 
     public Optional<Category> getCategory(Long categoryId) {

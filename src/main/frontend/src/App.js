@@ -3,12 +3,18 @@ import axios from "axios";
 import Navigation from "./components/Navigation";
 import Properties from "./components/Properties";
 import PropertyLocations from "./components/PropertyLocations";
-import { BorwserRouter, BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 
 const App = () => {
   useEffect(() => {
     axios
-      .get("http://localhost:8080/properties")
+      .get("http://localhost:8080/properties", {
+        //Adding this automatically adds header
+        auth: {
+          username: 'admin',
+          password: 'password'
+        }
+      })
       .then(function (response) {
         console.log(response);
       })

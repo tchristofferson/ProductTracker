@@ -3,6 +3,7 @@ package com.tchristofferson.homeproducts.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Entity(name = "Property")

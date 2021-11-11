@@ -32,8 +32,8 @@ public class PropertyService {
         return propertyRepository.findById(propertyId);
     }
 
-    public void saveProperty(Property property) {
-        propertyRepository.save(property);
+    public Property saveProperty(Property property) {
+        return propertyRepository.save(property);
     }
 
     public void deleteProperty(Long propertyId) {

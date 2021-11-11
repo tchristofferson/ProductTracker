@@ -1,12 +1,17 @@
 package com.tchristofferson.homeproducts.exc;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
 public class InvalidIdException extends RuntimeException {
 
-    public InvalidIdException(String message) {
+    private final HttpStatus status;
+
+    protected InvalidIdException(String message, HttpStatus status) {
         super(message);
+        this.status = status;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
     }
 }
