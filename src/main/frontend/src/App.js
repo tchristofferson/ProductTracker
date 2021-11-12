@@ -11,7 +11,9 @@ class App extends React.Component {
     super();
     this.state = {
       categories: [],
-      properties: []
+      properties: [],
+      propertyLocations: [],
+      products: []
     }
   }
 
@@ -38,9 +40,9 @@ class App extends React.Component {
           <div className="App">
             <Navigation/>
             <div className="container">
-              <Route exact path="/" component={Properties}/>
-              <Route path="/properties" component={Properties}/>
-              <Route path="propertyLocations" component={PropertyLocations}/>
+              <Route exact path="/" component={() => <Properties properties={this.state.properties} />} />
+              <Route path="/properties" component={() => <Properties properties={this.state.properties} />}/>
+              <Route path="propertyLocations" component={() => <PropertyLocations propertyLocations={this.state.propertyLocations} />}/>
             </div>
           </div>
         </BrowserRouter>
