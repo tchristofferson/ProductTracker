@@ -20,7 +20,7 @@ public class Product {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "property_location_id", nullable = false)
+    @JoinColumn(name = "property_location_id", nullable = false, foreignKey = @ForeignKey(name = "Fk_product_property_location"))
     @JsonProperty("propertyLocation")
     @NotNull
     private PropertyLocation propertyLocation;
