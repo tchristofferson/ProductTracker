@@ -11,9 +11,7 @@ class App extends React.Component {
     super();
     this.state = {
       categories: [],
-      properties: [],
-      propertyLocations: [],
-      products: []
+      properties: []
     }
   }
 
