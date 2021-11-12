@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import Navigation from "./components/Navigation";
 import Properties from "./components/Properties";
@@ -17,25 +17,25 @@ class App extends React.Component {
     }
   }
 
-  render() {
-    useEffect(() => {
-      axios
-          .get("http://localhost:8080/properties", {
-            //Adding this automatically adds header
-            auth: {
-              username: 'admin',
-              password: 'password'
-            }
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-    });
+  componentDidMount() {
+    axios
+      .get("http://localhost:8080/properties", {
+        //Adding this automatically adds header
+        auth: {
+          username: 'admin',
+          password: 'password'
+        }
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
-    return (
+    render() {
+      return (
         <BrowserRouter>
           <div className="App">
             <Navigation/>
@@ -46,7 +46,7 @@ class App extends React.Component {
             </div>
           </div>
         </BrowserRouter>
-    );
+      );
   }
 }
 
