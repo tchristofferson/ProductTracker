@@ -101,15 +101,19 @@ public class ApplicationRestController {
 
     /* Categories */
     @PostMapping(path = "/categories")
-    public Category addCategory(@RequestBody Category category) {
-        category.setId(null);
+    public Category addCategory(@RequestBody @Valid Category category) {
+        if (category.getId() != null)
+            throw new CategoryPostRequestIdException();
+
         return categoryService.save(category);
     }
 
     /* Properties */
     @PostMapping(path = "/properties")
-    public Property addProperty(@RequestBody Property property) {
-        property.setId(null);
+    public Property addProperty(@RequestBody @Valid Property property) {
+        if (property.getId() != null)
+            throw new PropertyPostRequestIdException();
+
         return propertyService.saveProperty(property);
     }
 

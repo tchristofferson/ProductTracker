@@ -4,6 +4,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,9 +25,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(unspecifiedIdException.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
+    @ExceptionHandler({CategoryPostRequestIdException.class, PropertyPostRequestIdException.class, PropertyLocationPostRequestIdException.class, ProductPostRequestIdException.class})
+    public ResponseEntity<String> handlePostRequestIdException(PostRequestIdException postRequestIdException) {
+        return new ResponseEntity<>(postRequestIdException.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        FieldError fieldError = ex.getBindingResult().getFieldError();
+        return new ResponseEntity<>(fieldError.getDefaultMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

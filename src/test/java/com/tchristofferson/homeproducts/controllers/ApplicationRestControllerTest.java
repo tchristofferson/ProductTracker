@@ -1,12 +1,16 @@
 package com.tchristofferson.homeproducts.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tchristofferson.homeproducts.HomeProductsApplication;
+import com.tchristofferson.homeproducts.models.Category;
+import com.tchristofferson.homeproducts.models.Property;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -16,6 +20,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,6 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class ApplicationRestControllerTest {
 
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private MockMvc mockMvc;
 
     @Autowired
@@ -34,120 +42,59 @@ public class ApplicationRestControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
+    /*
+     * POST Tests
+     */
+
+    /* Categories */
+
     @Test
-    public void getCategories() throws Exception {
-        performGet("/categories")
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isNotEmpty());
+    public void testCategoryPostWithNoName() throws Exception {
+        performPost("/categories", new Category())
+                .andExpect(status().is4xxClientError())
+                .andDo(result -> logger.info(result.getResponse().getContentAsString()));
     }
 
     @Test
-    public void getCategory() throws Exception {
-        final int id = 1;
+    public void testCategoryPostWithBlankName() throws Exception {
+        performPost("/categories", new Category(" "))
+                .andExpect(status().is4xxClientError())
+                .andDo(result -> logger.info(result.getResponse().getContentAsString()));
+    }
 
-        performGet("/categories/" + id)
-                .andExpect(status().isOk())
+    @Test
+    public void testCategoryPostWithId() throws Exception {
+        performPost("/categories", new Category(1L, "Lights"))
+                .andExpect(status().is4xxClientError())
+                .andDo(result -> logger.info(result.getResponse().getContentAsString()));
+    }
+
+    @Test
+    public void testCategoryPost() throws Exception {
+        final String categoryName = "Lights";
+
+        performPost("/categories", new Category(categoryName))
+                .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.name").isString())
-                .andExpect(jsonPath("$.name").isNotEmpty());
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value(categoryName));
+    }
+
+    /* Properties */
+
+    @Test
+    public void testPropertyPostWithNoName() throws Exception {
+        performPost("/properties", new Property())
+                .andExpect(status().is4xxClientError())
+                .andDo(result -> logger.info(result.getResponse().getContentAsString()));
     }
 
     @Test
-    public void getProperties() throws Exception {
-        performGet("/properties")
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isNotEmpty());
-    }
-
-    @Test
-    public void getProperty() throws Exception {
-        final int id = 1;
-
-        performGet("/properties/" + id)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.name").isString())
-                .andExpect(jsonPath("$.name").isNotEmpty());
-    }
-
-    @Test
-    public void getPropertyLocations() throws Exception {
-        final int propertyId = 1;
-
-        performGet("/propertyLocations", "propertyId", String.valueOf(propertyId))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isNotEmpty());
-    }
-
-    @Test
-    public void getPropertyLocation() throws Exception {
-        final int propertyLocationId = 1;
-
-        performGet("/propertyLocations/" + propertyLocationId)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(propertyLocationId))
-                .andExpect(jsonPath("$.name").isString())
-                .andExpect(jsonPath("$.name").isNotEmpty());
-    }
-
-    @Test
-    public void getProducts() {
-    }
-
-    @Test
-    public void getProduct() {
-    }
-
-    @Test
-    public void addCategory() {
-    }
-
-    @Test
-    public void addProperty() {
-    }
-
-    @Test
-    public void addPropertyLocation() {
-    }
-
-    @Test
-    public void addProduct() {
-    }
-
-    @Test
-    public void updateCategory() {
-    }
-
-    @Test
-    public void updateProperty() {
-    }
-
-    @Test
-    public void updatePropertyLocation() {
-    }
-
-    @Test
-    public void updateProduct() {
-    }
-
-    @Test
-    public void deleteCategory() {
-    }
-
-    @Test
-    public void deleteProperty() {
-    }
-
-    @Test
-    public void deletePropertyLocation() {
-    }
-
-    @Test
-    public void deleteProduct() {
+    public void testPropertyPostWithBlankName() throws Exception {
+        performPost("/properties", new Property(" "))
+                .andExpect(status().is4xxClientError())
+                .andDo(result -> System.out.println(result.getResponse().getErrorMessage()))
+                .andDo(result -> logger.info(result.getResponse().getContentAsString()));
     }
 
     private ResultActions performGet(String uri) throws Exception {
@@ -156,5 +103,13 @@ public class ApplicationRestControllerTest {
 
     private ResultActions performGet(String uri, String paramName, String param) throws Exception {
         return mockMvc.perform(MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON).param(paramName, param));
+    }
+
+    private ResultActions performPost(String uri, Object obj) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders.post(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(obj))
+                .characterEncoding(StandardCharsets.UTF_8));
     }
 }
