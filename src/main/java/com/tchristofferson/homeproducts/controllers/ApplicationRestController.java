@@ -143,6 +143,9 @@ public class ApplicationRestController {
     @PostMapping(path = "/products")
     @ResponseStatus(HttpStatus.CREATED)
     public Product addProduct(@RequestBody @Valid Product product) {
+        if (product.getId() != null)
+            throw new ProductPostRequestIdException();
+
         if (product.getPropertyLocation().getId() == null)
             throw new UnspecifiedPropertyLocationIdException();
 
@@ -152,6 +155,9 @@ public class ApplicationRestController {
             throw new InvalidPropertyLocationIdException(HttpStatus.NOT_FOUND);
 
         if (product.getCategory() != null) {
+            if (product.getCategory().getId() == null)
+                throw new UnspecifiedCategoryIdException();
+
             Optional<Category> optionalCategory = categoryService.getCategory(product.getCategory().getId());
 
             if (optionalCategory.isEmpty())
@@ -160,7 +166,6 @@ public class ApplicationRestController {
             product.setCategory(optionalCategory.get());
         }
 
-        product.setId(null);
         product.setPropertyLocation(optionalPropertyLocation.get());
         productService.saveProduct(product);
 

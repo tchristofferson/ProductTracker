@@ -2,9 +2,7 @@ package com.tchristofferson.homeproducts.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tchristofferson.homeproducts.HomeProductsApplication;
-import com.tchristofferson.homeproducts.exc.CategoryPostRequestIdException;
-import com.tchristofferson.homeproducts.exc.PropertyLocationPostRequestIdException;
-import com.tchristofferson.homeproducts.exc.PropertyPostRequestIdException;
+import com.tchristofferson.homeproducts.exc.*;
 import com.tchristofferson.homeproducts.models.Category;
 import com.tchristofferson.homeproducts.models.Product;
 import com.tchristofferson.homeproducts.models.Property;
@@ -27,9 +25,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,8 +36,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class ApplicationRestControllerTest {
 
+    private static final String CATEGORIES_URI = "/categories";
+    private static final String PROPERTIES_URI = "/properties";
+    private static final String PROPERTY_LOCATIONS_URI = "/propertyLocations";
+
     private static final long EXISTING_PROP_ID = 1L;
     private static final long EXISTING_PROP_LOC_ID = 1L;
+    private static final long EXISTING_CATEGORY_ID = 1L;
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -61,22 +64,22 @@ public class ApplicationRestControllerTest {
 
     @Test
     public void testCategoryPostWithNoName() throws Exception {
-        performPost("/categories", new Category())
-                .andExpect(status().is4xxClientError())
+        performPost(CATEGORIES_URI, new Category())
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
     }
 
     @Test
     public void testCategoryPostWithBlankName() throws Exception {
-        performPost("/categories", new Category(" "))
-                .andExpect(status().is4xxClientError())
+        performPost(CATEGORIES_URI, new Category(" "))
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
     }
 
     @Test
     public void testCategoryPostWithId() throws Exception {
-        performPost("/categories", new Category(1L, "Lights"))
-                .andExpect(status().is4xxClientError())
+        performPost(CATEGORIES_URI, new Category(1L, "Lights"))
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), CategoryPostRequestIdException.class));
     }
 
@@ -84,7 +87,7 @@ public class ApplicationRestControllerTest {
     public void testCategoryPost() throws Exception {
         final String categoryName = "Lights";
 
-        performPost("/categories", new Category(categoryName))
+        performPost(CATEGORIES_URI, new Category(categoryName))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id").isNumber())
@@ -95,22 +98,22 @@ public class ApplicationRestControllerTest {
 
     @Test
     public void testPropertyPostWithNoName() throws Exception {
-        performPost("/properties", new Property())
-                .andExpect(status().is4xxClientError())
+        performPost(PROPERTIES_URI, new Property())
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
     }
 
     @Test
     public void testPropertyPostWithBlankName() throws Exception {
-        performPost("/properties", new Property(" "))
-                .andExpect(status().is4xxClientError())
+        performPost(PROPERTIES_URI, new Property(" "))
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
     }
 
     @Test
     public void testPropertyPostWithId() throws Exception {
-        performPost("/properties", new Property(1L, "Home"))
-                .andExpect(status().is4xxClientError())
+        performPost(PROPERTIES_URI, new Property(1L, "Home"))
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), PropertyPostRequestIdException.class));
     }
 
@@ -118,7 +121,7 @@ public class ApplicationRestControllerTest {
     public void testPropertyPost() throws Exception {
         final String propertyName = "Home";
 
-        performPost("/properties", new Property(propertyName))
+        performPost(PROPERTIES_URI, new Property(propertyName))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id").isNumber())
@@ -132,8 +135,8 @@ public class ApplicationRestControllerTest {
         PropertyLocation propertyLocation = getPropertyLocation(null, null);
 
         //The 1 in the URI is the associated property id
-        performPost("/propertyLocations", propertyLocation)
-                .andExpect(status().is4xxClientError())
+        performPost(PROPERTY_LOCATIONS_URI, propertyLocation)
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
     }
 
@@ -141,8 +144,8 @@ public class ApplicationRestControllerTest {
     public void testPropertyLocationPostWithBlankName() throws Exception {
         PropertyLocation propertyLocation = getPropertyLocation(" ", null);
 
-        performPost("/propertyLocations", propertyLocation)
-                .andExpect(status().is4xxClientError())
+        performPost(PROPERTY_LOCATIONS_URI, propertyLocation)
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
     }
 
@@ -150,16 +153,148 @@ public class ApplicationRestControllerTest {
     public void testPropertyLocationPostWithId() throws Exception {
         PropertyLocation propertyLocation = getPropertyLocation("Kitchen", 1L);
 
-        performPost("/propertyLocations", propertyLocation)
-                .andExpect(status().is4xxClientError())
+        performPost(PROPERTY_LOCATIONS_URI, propertyLocation)
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), PropertyLocationPostRequestIdException.class));
+    }
+
+    @Test
+    public void testPropertyLocationPostWithNoProperty() throws Exception {
+        PropertyLocation propertyLocation = new PropertyLocation("Kitchen");
+
+        performPost(PROPERTY_LOCATIONS_URI, propertyLocation)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
+    }
+
+    @Test
+    public void testPropertyLocationPostWithPropertyWithNoId() throws Exception {
+        PropertyLocation propertyLocation = getPropertyLocation("Kitchen", null);
+        //The property exists but doesn't have an id
+        propertyLocation.getProperty().setId(null);
+
+        performPost(PROPERTY_LOCATIONS_URI, propertyLocation)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> assertEquals(result.getResolvedException().getClass(), UnspecifiedPropertyIdException.class));
+    }
+
+    @Test
+    public void testPropertyLocationPost() throws Exception {
+        final String propertyLocationName = "Kitchen";
+        PropertyLocation propertyLocation = getPropertyLocation(propertyLocationName, null);
+
+        performPost("/propertyLocations", propertyLocation)
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value(propertyLocationName));
     }
 
     /* Products */
 
     @Test
-    public void testProductPostWithNoName() {
-        Product product = new Product();
+    public void testProductPostWithNoName() throws Exception {
+        Product product = getProduct(null, null, true);
+
+        performPost("/products", product)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
+    }
+
+    @Test
+    public void testProductPostWithBlankName() throws Exception {
+        Product product = getProduct(" ", null, true);
+
+        performPost("/products", product)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
+    }
+
+    @Test
+    public void testProductPostWithId() throws Exception {
+        Product product = getProduct("Light Bulb", 1L, true);
+
+        performPost("/products", product)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> assertEquals(result.getResolvedException().getClass(), ProductPostRequestIdException.class));
+    }
+
+    @Test
+    public void testProductPostWithNoPropertyLocation() throws Exception {
+        Product product = getProduct("Light Bulb", null, true);
+        product.setPropertyLocation(null);
+
+        performPost("/products", product)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
+    }
+
+    @Test
+    public void testProductPostWithPropertyLocationWithNoId() throws Exception {
+        Product product = getProduct("Light Bulb", null, true);
+        product.getPropertyLocation().setId(null);
+
+        performPost("/products", product)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> assertEquals(result.getResolvedException().getClass(), UnspecifiedPropertyLocationIdException.class));
+    }
+
+    @Test
+    public void testProductPostWithCategoryWithNoId() throws Exception {
+        Product product = getProduct("Light Bulb", null, true);
+        product.getCategory().setId(null);
+
+        performPost("/products", product)
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> assertEquals(result.getResolvedException().getClass(), UnspecifiedCategoryIdException.class));
+    }
+
+    @Test
+    public void testProductPostWithNoCategory() throws Exception {
+        final String productName = "Light Bulb";
+        Product product = getProduct(productName, null, false);
+
+        performPost("/products", product)
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value(productName))
+                .andExpect(jsonPath("$.propertyLocation").exists())
+                .andExpect(jsonPath("$.category").doesNotExist());
+    }
+
+    @Test
+    public void testProductPost() throws Exception {
+        final String productName = "Light Bulb";
+        final String productNumber = UUID.randomUUID().toString();
+        final String productLink = "http://buythings.com/light-bulbs";
+        final int productInventory = 2;
+
+        Product product = getProduct(productName, null, true);
+        product.setProductNumber(productNumber);
+        product.setLink(productLink);
+        product.setInventory(productInventory);
+
+        performPost("/products", product)
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value(productName))
+                .andExpect(jsonPath("$.category").exists())
+                .andExpect(jsonPath("$.propertyLocation").exists())
+                .andExpect(jsonPath("$.productNumber").value(productNumber))
+                .andExpect(jsonPath("$.link").value(productLink))
+                .andExpect(jsonPath("$.inventory").value(productInventory));
+    }
+
+    private Product getProduct(String name, Long productId, boolean includeCategory) {
+        Product product = new Product(productId, name);
+        product.setPropertyLocation(new PropertyLocation(EXISTING_PROP_LOC_ID));
+
+        if (includeCategory)
+            product.setCategory(new Category(EXISTING_CATEGORY_ID));
+
+        return product;
     }
 
     private PropertyLocation getPropertyLocation(String name, Long propertyLocationId) {
@@ -183,7 +318,6 @@ public class ApplicationRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(obj))
                 .characterEncoding(StandardCharsets.UTF_8))
-                .andExpect(result -> assertFalse(result.getResponse().getContentAsString().isBlank()))//Should something
                 .andDo(result -> logger.info(result.getResponse().getContentAsString()));//Log error message or returned json
     }
 }

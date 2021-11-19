@@ -33,7 +33,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         FieldError fieldError = ex.getBindingResult().getFieldError();
-        return new ResponseEntity<>(fieldError.getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(fieldError.getDefaultMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

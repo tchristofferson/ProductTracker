@@ -26,7 +26,7 @@ public class Product {
     private PropertyLocation propertyLocation;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "Fk_product_categoryId"))
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "Fk_product_categoryId"))
     @JsonProperty("category")
     private Category category;
 
