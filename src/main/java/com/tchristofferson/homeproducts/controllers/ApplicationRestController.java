@@ -101,6 +101,7 @@ public class ApplicationRestController {
 
     /* Categories */
     @PostMapping(path = "/categories")
+    @ResponseStatus(HttpStatus.CREATED)
     public Category addCategory(@RequestBody @Valid Category category) {
         if (category.getId() != null)
             throw new CategoryPostRequestIdException();
@@ -120,13 +121,15 @@ public class ApplicationRestController {
     /* PropertyLocation */
     @PostMapping(path = "/propertyLocations/{propertyId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public PropertyLocation addPropertyLocation(@PathVariable("propertyId") long propertyId, @RequestBody PropertyLocation propertyLocation) {
+    public PropertyLocation addPropertyLocation(@PathVariable("propertyId") long propertyId, @RequestBody @Valid PropertyLocation propertyLocation) {
         Optional<Property> optionalProperty = propertyService.getProperty(propertyId);
 
         if (optionalProperty.isEmpty())
             throw new InvalidPropertyIdException(HttpStatus.NOT_FOUND);
 
-        propertyLocation.setId(null);
+        if (propertyLocation.getId() != null)
+            throw new PropertyLocationPostRequestIdException();
+
         propertyLocation.setProperty(optionalProperty.get());
         propertyLocationService.savePropertyLocation(propertyLocation);
         return propertyLocation;

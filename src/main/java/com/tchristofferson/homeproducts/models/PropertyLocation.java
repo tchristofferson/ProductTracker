@@ -21,7 +21,7 @@ public class PropertyLocation {
     @ManyToOne
     @JoinColumn(name = "property_id", nullable = false, foreignKey = @ForeignKey(name = "Fk_property_location_propertyId"))
     @JsonProperty("property")
-    @NotNull(message = "Must specify an associated property!")
+    @NotNull(message = "Property must be set!")
     private Property property;
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")

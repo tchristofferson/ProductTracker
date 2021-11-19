@@ -22,7 +22,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "property_location_id", nullable = false, foreignKey = @ForeignKey(name = "Fk_product_property_location"))
     @JsonProperty("propertyLocation")
-    @NotNull
+    @NotNull(message = "Property location must be set!")
     private PropertyLocation propertyLocation;
 
     @ManyToOne
