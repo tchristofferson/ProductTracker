@@ -111,6 +111,7 @@ public class ApplicationRestController {
 
     /* Properties */
     @PostMapping(path = "/properties")
+    @ResponseStatus(HttpStatus.CREATED)
     public Property addProperty(@RequestBody @Valid Property property) {
         if (property.getId() != null)
             throw new PropertyPostRequestIdException();

@@ -114,6 +114,17 @@ public class ApplicationRestControllerTest {
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), PropertyPostRequestIdException.class));
     }
 
+    @Test
+    public void testPropertyPost() throws Exception {
+        final String propertyName = "Home";
+
+        performPost("/properties", new Property(propertyName))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value(propertyName));
+    }
+
     /* Property Locations */
 
     @Test
@@ -165,7 +176,7 @@ public class ApplicationRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(obj))
                 .characterEncoding(StandardCharsets.UTF_8))
-                .andExpect(result -> assertFalse(result.getResponse().getContentAsString().isBlank()))//Should return error message
-                .andDo(result -> logger.info(result.getResponse().getContentAsString()));//Log error message
+                .andExpect(result -> assertFalse(result.getResponse().getContentAsString().isBlank()))//Should something
+                .andDo(result -> logger.info(result.getResponse().getContentAsString()));//Log error message or returned json
     }
 }
