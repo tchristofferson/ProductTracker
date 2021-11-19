@@ -120,10 +120,13 @@ public class ApplicationRestController {
     }
 
     /* PropertyLocation */
-    @PostMapping(path = "/propertyLocations/{propertyId}")
+    @PostMapping(path = "/propertyLocations")
     @ResponseStatus(HttpStatus.CREATED)
-    public PropertyLocation addPropertyLocation(@PathVariable("propertyId") long propertyId, @RequestBody @Valid PropertyLocation propertyLocation) {
-        Optional<Property> optionalProperty = propertyService.getProperty(propertyId);
+    public PropertyLocation addPropertyLocation(@RequestBody @Valid PropertyLocation propertyLocation) {
+        if (propertyLocation.getProperty().getId() == null)
+            throw new UnspecifiedPropertyIdException();
+
+        Optional<Property> optionalProperty = propertyService.getProperty(propertyLocation.getProperty().getId());
 
         if (optionalProperty.isEmpty())
             throw new InvalidPropertyIdException(HttpStatus.NOT_FOUND);
@@ -137,10 +140,13 @@ public class ApplicationRestController {
     }
 
     /* Product */
-    @PostMapping(path = "/products/{propertyLocationId}")
+    @PostMapping(path = "/products")
     @ResponseStatus(HttpStatus.CREATED)
-    public Product addProduct(@PathVariable("propertyLocationId") long propertyLocationId, @RequestBody @Valid Product product) {
-        Optional<PropertyLocation> optionalPropertyLocation = propertyLocationService.getPropertyLocation(propertyLocationId);
+    public Product addProduct(@RequestBody @Valid Product product) {
+        if (product.getPropertyLocation().getId() == null)
+            throw new UnspecifiedPropertyLocationIdException();
+
+        Optional<PropertyLocation> optionalPropertyLocation = propertyLocationService.getPropertyLocation(product.getPropertyLocation().getId());
 
         if (optionalPropertyLocation.isEmpty())
             throw new InvalidPropertyLocationIdException(HttpStatus.NOT_FOUND);

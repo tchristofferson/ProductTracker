@@ -129,28 +129,28 @@ public class ApplicationRestControllerTest {
 
     @Test
     public void testPropertyLocationPostWithNoName() throws Exception {
-        PropertyLocation propertyLocation = new PropertyLocation();
+        PropertyLocation propertyLocation = getPropertyLocation(null, null);
 
         //The 1 in the URI is the associated property id
-        performPost("/propertyLocations/" + EXISTING_PROP_ID, propertyLocation)
+        performPost("/propertyLocations", propertyLocation)
                 .andExpect(status().is4xxClientError())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
     }
 
     @Test
     public void testPropertyLocationPostWithBlankName() throws Exception {
-        PropertyLocation propertyLocation = new PropertyLocation(" ");
+        PropertyLocation propertyLocation = getPropertyLocation(" ", null);
 
-        performPost("/propertyLocations/" + EXISTING_PROP_ID, propertyLocation)
+        performPost("/propertyLocations", propertyLocation)
                 .andExpect(status().is4xxClientError())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), MethodArgumentNotValidException.class));
     }
 
     @Test
     public void testPropertyLocationPostWithId() throws Exception {
-        PropertyLocation propertyLocation = new PropertyLocation(1L, "Kitchen");
+        PropertyLocation propertyLocation = getPropertyLocation("Kitchen", 1L);
 
-        performPost("/propertyLocations/" + EXISTING_PROP_ID, propertyLocation)
+        performPost("/propertyLocations", propertyLocation)
                 .andExpect(status().is4xxClientError())
                 .andExpect(result -> assertEquals(result.getResolvedException().getClass(), PropertyLocationPostRequestIdException.class));
     }
@@ -160,6 +160,13 @@ public class ApplicationRestControllerTest {
     @Test
     public void testProductPostWithNoName() {
         Product product = new Product();
+    }
+
+    private PropertyLocation getPropertyLocation(String name, Long propertyLocationId) {
+        PropertyLocation propertyLocation = new PropertyLocation(propertyLocationId, name);
+        propertyLocation.setProperty(new Property(EXISTING_PROP_ID));
+
+        return propertyLocation;
     }
 
     private ResultActions performGet(String uri) throws Exception {
