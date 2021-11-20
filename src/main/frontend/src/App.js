@@ -49,9 +49,9 @@ class App extends React.Component {
         <div>
           <Navigation />
           <div className="container">
-            <Route exact path="/" component={() => <Properties data={this.state.properties} />} />
-            <Route path="/properties" component={() => <Properties data={this.state.properties} />}/>
-            <Route path="propertyLocations" component={() => <PropertyLocations data={this.state.propertyLocations} />}/>
+            <Route exact path="/" handleChanges={this.handleStateChange} component={() => <Properties data={this.state.properties} />} />
+            <Route path="/properties" handleChanges={this.handleStateChange} component={() => <Properties data={this.state.properties} />}/>
+            <Route path="propertyLocations" handleChanges={this.handleStateChange} component={() => <PropertyLocations data={this.state.propertyLocations} />}/>
           </div>
         </div>
       </BrowserRouter>
