@@ -39,19 +39,19 @@ class App extends React.Component {
       });
   }
 
-    render = () => {
-      return (
-        <BrowserRouter>
-          <div>
-            <Navigation />
-            <div className="container">
-              <Route exact path="/" component={() => <Properties data={this.state.properties} />} />
-              <Route path="/properties" component={() => <Properties data={this.state.properties} />}/>
-              <Route path="propertyLocations" component={() => <PropertyLocations data={this.state.propertyLocations} />}/>
-            </div>
+  render = () => {
+    return (
+      <BrowserRouter>
+        <div>
+          <Navigation />
+          <div className="container">
+            <Route exact path="/" component={() => <Properties data={this.state.properties} />} />
+            <Route path="/properties" component={() => <Properties data={this.state.properties} />}/>
+            <Route path="propertyLocations" component={() => <PropertyLocations data={this.state.propertyLocations} />}/>
           </div>
-        </BrowserRouter>
-      );
+        </div>
+      </BrowserRouter>
+    );
   }
 }
 
