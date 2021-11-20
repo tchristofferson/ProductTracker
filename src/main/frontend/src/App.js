@@ -17,10 +17,12 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
+    const self = this;
+
     axios
       .get("http://localhost:8080/properties", {
-        //Adding this automatically adds header
+        //Adding this, automatically adds header
         auth: {
           username: 'admin',
           password: 'password'
@@ -28,21 +30,24 @@ class App extends React.Component {
       })
       .then(function (response) {
         console.log(response);
+        self.setState({
+          properties: response.data
+        });
       })
       .catch(function (error) {
         console.log(error);
       });
   }
 
-    render() {
+    render = () => {
       return (
         <BrowserRouter>
-          <div className="App">
-            <Navigation/>
+          <div>
+            <Navigation />
             <div className="container">
-              <Route exact path="/" component={() => <Properties properties={this.state.properties} />} />
-              <Route path="/properties" component={() => <Properties properties={this.state.properties} />}/>
-              <Route path="propertyLocations" component={() => <PropertyLocations propertyLocations={this.state.propertyLocations} />}/>
+              <Route exact path="/" component={() => <Properties data={this.state.properties} />} />
+              <Route path="/properties" component={() => <Properties data={this.state.properties} />}/>
+              <Route path="propertyLocations" component={() => <PropertyLocations data={this.state.propertyLocations} />}/>
             </div>
           </div>
         </BrowserRouter>
