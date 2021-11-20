@@ -17,6 +17,10 @@ class App extends React.Component {
     }
   }
 
+  handleStateChange = (state) => {
+    this.setState(state);
+  }
+
   componentDidMount = () => {
     const self = this;
 
