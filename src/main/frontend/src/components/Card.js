@@ -8,9 +8,9 @@ const Card = (props) => (
         <span className="card-title truncate">{props.title}</span>
       </div>
       <div className="card-action">
-        <Link className="btn blue darken-1" to={"#"}>{props.viewButtonText}</Link>
-        <Link className="btn" to={"#"}>Edit</Link>
-        <Link className="btn red" to={"#"}>Delete</Link>
+        <Link className={"btn blue darken-1"} to={"#"}>{props.viewButtonText}</Link>
+        <Link className={"btn"} to={"#"}>Edit</Link>
+        <Link className={"btn red"} to={"#"}>Delete</Link>
       </div>
     </div>
   </div>
