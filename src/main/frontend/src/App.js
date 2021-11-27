@@ -1,19 +1,20 @@
 import React from "react";
 import axios from "axios";
 import Navigation from "./components/Navigation";
-import Properties from "./components/Properties";
-import PropertyLocations from "./components/PropertyLocations";
-import { BrowserRouter, Route } from "react-router-dom";
+import Properties from "./components/pages/Properties";
+import PropertyLocations from "./components/pages/PropertyLocations";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import Property from "./components/pages/Property";
 
 class App extends React.Component {
 
   constructor() {
     super();
     this.state = {
-      categories: [],
-      properties: [],
-      propertyLocations: [],
-      products: []
+      categories: new Map(),
+      properties: new Map(),
+      propertyLocations: new Map(),
+      products: new Map()
     }
   }
 
@@ -33,9 +34,13 @@ class App extends React.Component {
         }
       })
       .then(function (response) {
-        console.log(response);
+        const propertiesMap = new Map();
+        response.data.forEach(property => {
+          propertiesMap.set(property.id, property);
+        })
+
         self.setState({
-          properties: response.data
+          properties: propertiesMap
         });
       })
       .catch(function (error) {
@@ -49,9 +54,12 @@ class App extends React.Component {
         <div>
           <Navigation />
           <div className="container">
-            <Route exact path="/" handleChanges={this.handleStateChange} component={() => <Properties data={this.state.properties} />} />
-            <Route path="/properties" handleChanges={this.handleStateChange} component={() => <Properties data={this.state.properties} />}/>
-            <Route path="/propertyLocations" handleChanges={this.handleStateChange} component={() => <PropertyLocations data={this.state.propertyLocations} />}/>
+            <Switch>
+              <Route exact path="/" component={() => <Properties handleStateChange={this.handleStateChange} data={this.state.properties} />} />
+              <Route exact path="/properties" component={() => <Properties handleStateChange={this.handleStateChange} data={this.state.properties} />}/>
+              <Route exact path={"/properties/:propertyId"} component={() => <Property />} />
+              <Route exact path="/propertyLocations" component={() => <PropertyLocations handleStateChange={this.handleStateChange} data={this.state.propertyLocations} />}/>
+            </Switch>
           </div>
         </div>
       </BrowserRouter>
