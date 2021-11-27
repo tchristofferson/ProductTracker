@@ -2,6 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 class PropertyLocations extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      propertyLocations: []
+    }
+  }
+
+  componentDidMount = () => {
+
+  }
+
   render() {
     return (
       <div>
