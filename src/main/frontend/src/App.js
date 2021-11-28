@@ -5,6 +5,17 @@ import PropertyLocations from "./components/pages/PropertyLocations";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      auth: {
+        username: "admin",
+        password: "password"
+      },
+      backend: "http://localhost:8080"
+    }
+  }
+
   render = () => {
     return (
       <BrowserRouter>
@@ -14,7 +25,7 @@ class App extends React.Component {
             <Switch>
               <Route exact path="/" component={Properties} />
               <Route exact path="/properties" component={Properties}/>
-              <Route exact path="/properties/:propertyId" component={PropertyLocations} />
+              <Route exact path="/properties/:propertyId" component={() => <PropertyLocations settings={this.state} />} />
             </Switch>
           </div>
         </div>
