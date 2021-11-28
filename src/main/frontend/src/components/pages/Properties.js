@@ -34,9 +34,14 @@ class Properties extends React.Component {
 
   render() {
     const cards = [];
-    this.state.properties.forEach(property => cards.push(<Card title={property.name} viewButtonText={"Locations"}
-                                                            viewTo={"/properties/" + property.id} deleteTo={"/properties/" + property.id}
-                                                            key={property.id}/>));
+    this.state.properties.forEach(property => {
+      cards.push(
+        <Card title={property.name}
+              viewButtonText={"Locations"}
+              viewTo={"/properties/" + property.id} deleteTo={"/properties/" + property.id}
+              key={property.id}/>
+      );
+    })
 
     return (
       <div>

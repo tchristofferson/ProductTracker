@@ -1,12 +1,14 @@
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
 import axios from "axios";
+import Card from "../Card";
+import CardView from "../CardView";
 
 class PropertyLocations extends React.Component {
   constructor() {
     super();
     this.state = {
-      propertyName: null,
+      propertyName: "",
       propertyLocations: []
     }
   }
@@ -45,6 +47,17 @@ class PropertyLocations extends React.Component {
   }
 
   render() {
+    const cards = [];
+    this.state.propertyLocations.forEach(propertyLocation => {
+      cards.push(
+        <Card title={propertyLocation.name}
+              viewButtonText={"Products"}
+              viewTo={"/products?propertyLocationId=" + propertyLocation.id}
+              deleteTo={"/propertyLocations/" + propertyLocation.id}
+              key={propertyLocation.id} />
+      );
+    })
+
     return (
       <div>
         <h1>Product Tracking</h1>
@@ -54,6 +67,7 @@ class PropertyLocations extends React.Component {
           <Link to="#">Locations</Link>
         </p>
         <h5>Locations</h5>
+        <CardView cards={cards} />
       </div>
     );
   }
