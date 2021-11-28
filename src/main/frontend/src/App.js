@@ -23,8 +23,8 @@ class App extends React.Component {
           <Navigation />
           <div className="container">
             <Switch>
-              <Route exact path="/" component={Properties} />
-              <Route exact path="/properties" component={Properties}/>
+              <Route exact path="/" component={() => <Properties settings={this.state} />} />
+              <Route exact path="/properties" component={() => <Properties settings={this.state} />}/>
               <Route exact path="/properties/:propertyId" component={() => <PropertyLocations settings={this.state} />} />
             </Switch>
           </div>

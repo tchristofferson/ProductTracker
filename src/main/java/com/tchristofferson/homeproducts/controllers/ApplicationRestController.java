@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ApplicationRestController {
 
     private final CategoryService categoryService;

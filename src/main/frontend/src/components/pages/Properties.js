@@ -38,8 +38,10 @@ class Properties extends React.Component {
       cards.push(
         <Card title={property.name}
               viewButtonText={"Locations"}
-              viewTo={"/properties/" + property.id} deleteTo={"/properties/" + property.id}
-              key={property.id}/>
+              viewTo={"/properties/" + property.id}
+              deleteTo={"/properties/" + property.id}
+              key={property.id}
+              settings={this.props.settings} />
       );
     })
 
