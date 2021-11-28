@@ -18,7 +18,7 @@ public class PropertyLocation {
     @JsonProperty("id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "property_id", nullable = false, foreignKey = @ForeignKey(name = "Fk_property_location_propertyId"))
     @JsonProperty("property")
     @NotNull(message = "Property must be set!")
