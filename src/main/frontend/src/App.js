@@ -2,7 +2,8 @@ import React from "react";
 import Navigation from "./components/Navigation";
 import Properties from "./components/pages/Properties";
 import PropertyLocations from "./components/pages/PropertyLocations";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route} from "react-router-dom";
+import Products from "./components/pages/Products";
 
 class App extends React.Component {
   constructor() {
@@ -22,11 +23,10 @@ class App extends React.Component {
         <div>
           <Navigation />
           <div className="container">
-            <Switch>
-              <Route exact path="/" component={() => <Properties settings={this.state} />} />
-              <Route exact path="/properties" component={() => <Properties settings={this.state} />}/>
-              <Route exact path="/properties/:propertyId" component={() => <PropertyLocations settings={this.state} />} />
-            </Switch>
+            <Route exact path="/" component={() => <Properties settings={this.state} />} />
+            <Route exact path="/properties" component={() => <Properties settings={this.state} />}/>
+            <Route exact path="/properties/:propertyId" component={() => <PropertyLocations settings={this.state} />} />
+            <Route path="/products" component={() => <Products settings={this.state} />}/>
           </div>
         </div>
       </BrowserRouter>
