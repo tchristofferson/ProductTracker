@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import CardView from "../CardView";
 import Card from "../Card";
 import CollapsibleList from "../CollapsibleList";
@@ -84,7 +84,8 @@ const Products = (props) => {
 
   return (
     <div>
-      <h1>Test</h1>
+      <h1>Product Tracking</h1>
+      <h5>Products</h5>
       <CollapsibleListView content={collapsibleListArray} />
     </div>
   );
