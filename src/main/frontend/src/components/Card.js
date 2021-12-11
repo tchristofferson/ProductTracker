@@ -13,7 +13,7 @@ class Card extends React.Component {
         auth: self.props.settings.auth
       })
       .then(function (response) {
-        //Delete this card from CardView cards
+        //TODO: Delete this card from CardView cards
       })
       .catch(function (error) {
         console.log(error);

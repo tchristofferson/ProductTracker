@@ -3,12 +3,17 @@ import axios from "axios";
 import {withRouter} from "react-router-dom";
 import CardView from "../CardView";
 import Card from "../Card";
+import CollapsibleList from "../CollapsibleList";
+import CollapsibleListView from "../CollapsibleListView";
 
 const Products = (props) => {
   //key=categoryId, value=product array
   const [products, setProducts] = useState(new Map())
 
   useEffect(() => {
+    const elems = document.querySelectorAll('.collapsible');
+    window.M.Collapsible.init(elems);
+
     const credentials = props.settings.auth;
     const search = props.location.search;
     const propertyLocationId = new URLSearchParams(search).get("propertyLocationId");
@@ -22,14 +27,14 @@ const Products = (props) => {
 
         response.data.forEach((product) => {
           const categoryId = product.category.id;
-          let productList = products.get(categoryId);
+          let productArray = products.get(categoryId);
 
-          if (productList === undefined) {
-            productList = [];
-            products.set(categoryId, productList);
+          if (productArray === undefined) {
+            productArray = [];
+            products.set(categoryId, productArray);
           }
 
-          productList.push(product);
+          productArray.push(product);
         })
 
         setProducts(products);
@@ -39,14 +44,48 @@ const Products = (props) => {
       });
   }, [props])
 
-  const categoryList = [];
+  const collapsibleListArray = [];
+  let productCardArray = [];
+  let lastCategory = null;
   products.forEach((productArray, categoryId) => {
+    if (lastCategory === null || lastCategory.id !== categoryId) {
+      if (lastCategory !== null) {
+        collapsibleListArray.push(
+          <CollapsibleList title={lastCategory.name}
+                           content={<CardView cards={productCardArray} />}
+                           key={lastCategory.id} />
+        );
+      }
 
+      //productArray guaranteed to have at least one element
+      lastCategory = productArray[0].category;
+      productCardArray = [];
+    }
+
+    productArray.forEach((product) => {
+      productCardArray.push(
+        <Card settings={props.settings}
+              deleteTo={"/products/" + product.id}
+              title={product.name}
+              viewTo={"/products/" + product.id}
+              viewButtonText={"View"}
+              key={product.id} />
+      );
+    })
   })
+
+  if (lastCategory !== null) {
+    collapsibleListArray.push(
+      <CollapsibleList title={lastCategory.name}
+                       content={<CardView cards={productCardArray} />}
+                       key={lastCategory.id} />
+    );
+  }
 
   return (
     <div>
       <h1>Test</h1>
+      <CollapsibleListView content={collapsibleListArray} />
     </div>
   );
 }

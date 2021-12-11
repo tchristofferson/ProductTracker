@@ -3,14 +3,14 @@ const CollapsibleList = (props) => {
   const content = props.content;
 
   return(
-    <div>
-      <div className="collapsible-header">
+    <li>
+      <div className="collapsible-header black-text">
         {title}
       </div>
       <div className="collapsible-body">
         {content}
       </div>
-    </div>
+    </li>
   );
 }
 
