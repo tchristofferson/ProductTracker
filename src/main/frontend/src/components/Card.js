@@ -14,6 +14,7 @@ class Card extends React.Component {
       })
       .then(function (response) {
         //TODO: Delete this card from CardView cards
+        window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
