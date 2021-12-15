@@ -5,10 +5,12 @@ import CardView from "../CardView";
 import Card from "../Card";
 import CollapsibleList from "../CollapsibleList";
 import CollapsibleListView from "../CollapsibleListView";
+import FloatingAddButton from "../FloatingAddButton";
 
 const Products = (props) => {
   //key=categoryId, value=product array
-  const [products, setProducts] = useState(new Map())
+  const [products, setProducts] = useState(new Map());
+  const [propertyLocationId, setPropertyLocationId] = useState(null);
 
   useEffect(() => {
     const elems = document.querySelectorAll('.collapsible');
@@ -17,6 +19,7 @@ const Products = (props) => {
     const credentials = props.settings.auth;
     const search = props.location.search;
     const propertyLocationId = new URLSearchParams(search).get("propertyLocationId");
+    setPropertyLocationId(propertyLocationId);
 
     axios
       .get("http://localhost:8080/products?propertyLocationId=" + propertyLocationId, {
@@ -87,6 +90,7 @@ const Products = (props) => {
       <h1>Product Tracking</h1>
       <h5>Products</h5>
       <CollapsibleListView content={collapsibleListArray} />
+      <FloatingAddButton to={"/products/new?propertyLocationId=" + (propertyLocationId === null ? "" : propertyLocationId)} />
     </div>
   );
 }

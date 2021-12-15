@@ -2,6 +2,7 @@ import React from "react";
 import Card from "../Card";
 import CardView from "../CardView";
 import axios from "axios";
+import FloatingAddButton from "../FloatingAddButton";
 
 class Properties extends React.Component {
   constructor() {
@@ -50,6 +51,7 @@ class Properties extends React.Component {
         <h1>Product Tracking</h1>
         <h5>Properties</h5>
         <CardView cards={cards}/>
+        <FloatingAddButton to="/properties/new" />
       </div>
     )
   }

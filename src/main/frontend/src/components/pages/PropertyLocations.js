@@ -3,12 +3,13 @@ import {Link, withRouter} from "react-router-dom";
 import axios from "axios";
 import Card from "../Card";
 import CardView from "../CardView";
+import FloatingAddButton from "../FloatingAddButton";
 
 class PropertyLocations extends React.Component {
   constructor() {
     super();
     this.state = {
-      propertyName: "",
+      property: null,
       propertyLocations: []
     }
   }
@@ -25,7 +26,7 @@ class PropertyLocations extends React.Component {
       })
       .then(function (response) {
         self.setState({
-          propertyName: response.data.name
+          property: response.data
         })
       })
       .catch(function (error) {
@@ -62,12 +63,13 @@ class PropertyLocations extends React.Component {
       <div>
         <h1>Product Tracking</h1>
         <p>
-          <Link to="/properties">{this.state.propertyName}</Link>
+          <Link to="/properties">{this.state.property === null ? "" : this.state.property.name}</Link>
           <i className="material-icons tiny">chevron_right</i>
           <Link to="#">Locations</Link>
         </p>
         <h5>Locations</h5>
         <CardView cards={cards} />
+        <FloatingAddButton to={"/propertyLocations/new?propertyId=" + (this.state.property === null ? "" : this.state.property.id)} />
       </div>
     );
   }
